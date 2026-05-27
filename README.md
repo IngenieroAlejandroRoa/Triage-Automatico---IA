@@ -422,8 +422,8 @@ npm run preview    # Previsualizar build
 **Proyecto colaborativo desarrollado por:**
 
 - **Ingeniero Alejandro Roa**
-- **Alisson Navarro**
-- **Laura Holguín**
+- **Ingeniera Alisson Navarro**
+- **Ingeniera Laura Holguín**
 
 📧 **Contacto:** alejoroaaparicio@gmail.com
 
