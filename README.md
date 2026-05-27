@@ -19,11 +19,12 @@ Proyecto académico de IA que entrena y compara múltiples modelos de ML para au
 
 ## 🎯 Descripción General
 
-Este es un **proyecto académico de Machine Learning** que estudia y compara diferentes algoritmos de clasificación para automatizar el triaje médico KTAS. 
+Este es un **proyecto académico de Machine Learning** que estudia y compara diferentes algoritmos de clasificación para automatizar el triaje médico KTAS.
 
 El trabajo incluye:
+
 - 📊 **Análisis exploratorio** de datos clínicos de 1,267 pacientes
-- 🔬 **Limpieza y preprocesamiento** de variables categóricas y numéricas  
+- 🔬 **Limpieza y preprocesamiento** de variables categóricas y numéricas
 - 🤖 **Entrenamiento y evaluación** de 5 modelos ML diferentes
 - 📈 **Comparación de rendimiento** mediante métricas estándar de ML
 - 🎨 **Interfaz visual** para demostración del modelo elegido
@@ -32,13 +33,14 @@ El trabajo incluye:
 
 El **Sistema Monárquico Canadiense de Triage (KTAS)** clasifica pacientes en 5 niveles de urgencia:
 
-| Nivel | Urgencia | Descripción | Tiempo Espera |
-|-------|----------|-------------|----------------|
-| **1** | 🔴 Resucitación | Estado crítico, riesgo vital inmediato | Inmediato |
-| **2** | 🟠 Emergencia | Muy urgente, evaluación inmediata | 10-15 min |
-| **3** | 🟡 Urgencia | Urgente, evaluación rápida | 30-60 min |
-| **4** | 🟢 Menos Urgencia | Semiurgente | 1-2 horas |
-| **5** | 🔵 No Urgencia | No urgente | 2-4 horas |
+
+| Nivel | Urgencia          | Descripción                            | Tiempo Espera |
+| ----- | ----------------- | --------------------------------------- | ------------- |
+| **1** | 🔴 Resucitación  | Estado crítico, riesgo vital inmediato | Inmediato     |
+| **2** | 🟠 Emergencia     | Muy urgente, evaluación inmediata      | 10-15 min     |
+| **3** | 🟡 Urgencia       | Urgente, evaluación rápida            | 30-60 min     |
+| **4** | 🟢 Menos Urgencia | Semiurgente                             | 1-2 horas     |
+| **5** | 🔵 No Urgencia    | No urgente                              | 2-4 horas     |
 
 ---
 
@@ -47,7 +49,7 @@ El **Sistema Monárquico Canadiense de Triage (KTAS)** clasifica pacientes en 5 
 ### 1️⃣ **Fuente de Datos**
 
 <div align="center">
-  
+
 **Dataset:** Emergency Service Triage Application (Kaggle)
 
 - 📋 **1,267 registros** de pacientes adultos
@@ -61,11 +63,13 @@ El **Sistema Monárquico Canadiense de Triage (KTAS)** clasifica pacientes en 5 
 ### 2️⃣ **Variables Utilizadas**
 
 #### Datos Demográficos
+
 - **Sex:** Sexo del paciente (Femenino/Masculino)
 - **Age:** Edad en años
 - **Arrival mode:** Modo de llegada (A pie, Ambulancia pública/privada, Otros)
 
 #### Signos Vitales (medidos en el triaje inicial)
+
 - **HR:** Frecuencia Cardíaca (latidos/min)
 - **SBP:** Presión Sistólica (mmHg)
 - **DBP:** Presión Diastólica (mmHg)
@@ -74,6 +78,7 @@ El **Sistema Monárquico Canadiense de Triage (KTAS)** clasifica pacientes en 5 
 - **Saturation:** Saturación de Oxígeno (%)
 
 #### Evaluación Clínica
+
 - **Mental:** Estado mental (Alerta, Respuesta verbal, Respuesta al dolor, Sin respuesta)
 - **Pain:** Presencia de dolor (Sí/No)
 - **NRS_pain:** Escala de dolor numérica (0-10)
@@ -106,13 +111,14 @@ El **Sistema Monárquico Canadiense de Triage (KTAS)** clasifica pacientes en 5 
 
 ### 4️⃣ **Técnicas Aplicadas**
 
-| Técnica | Descripción | Aplicación |
-|---------|-------------|-----------|
+
+| Técnica             | Descripción                            | Aplicación                                |
+| -------------------- | --------------------------------------- | ------------------------------------------ |
 | **One-Hot Encoding** | Codificación de variables categóricas | Chief_complain, Mental, Arrival mode, etc. |
-| **StandardScaler** | Normalización de escala | Signos vitales (HR, SBP, RR, BT) |
-| **Train-Test Split** | Partición 80-20 estratificada | Validación del modelo |
-| **Cross-Validation** | Validación cruzada (5-folds) | Evaluación robusta de hiperparámetros |
-| **GridSearchCV** | Búsqueda de hiperparámetros óptimos | Tuning de modelos complejos |
+| **StandardScaler**   | Normalización de escala                | Signos vitales (HR, SBP, RR, BT)           |
+| **Train-Test Split** | Partición 80-20 estratificada          | Validación del modelo                     |
+| **Cross-Validation** | Validación cruzada (5-folds)           | Evaluación robusta de hiperparámetros    |
+| **GridSearchCV**     | Búsqueda de hiperparámetros óptimos  | Tuning de modelos complejos                |
 
 ---
 
@@ -121,26 +127,31 @@ El **Sistema Monárquico Canadiense de Triage (KTAS)** clasifica pacientes en 5 
 Se entrenaron y compararon **5 modelos de clasificación multiclase**:
 
 ### 1. **Regresión Logística Multiclase**
+
 - ✅ **Ventajas:** Interpretabilidad, entrenamiento rápido
 - ❌ **Limitaciones:** Asume relaciones lineales
 - 📊 **Aplicación:** Baseline de referencia
 
 ### 2. **Support Vector Machine (SVM)**
+
 - ✅ **Ventajas:** Eficaz en espacios multidimensionales
 - 🔧 **Hiperparámetros ajustados:** Kernel, C, γ
 - ⚖️ **Balanceo:** class_weight="balanced" para clases desbalanceadas
 
 ### 3. **Red Neuronal Artificial (RNA)**
+
 - ✅ **Ventajas:** Captura relaciones no-lineales complejas
 - 🏗️ **Arquitectura:** Capas ocultas ajustables
 - 📚 **Optimización:** Early stopping y validación cruzada
 
 ### 4. **Random Forest**
+
 - ✅ **Ventajas:** Robustez, manejo de variables heterogéneas
 - 🌲 **Características:** Ensemble de árboles de decisión
 - 🎯 **Feature importance:** Identifica variables más relevantes
 
 ### 5. **Gradient Boosting / XGBoost**
+
 - ✅ **Ventajas:** Precisión muy alta, construcción secuencial
 - ⚡ **Eficiencia:** Optimizado para rendimiento
 - 📈 **Complejidad:** Requiere más tuning
@@ -230,6 +241,7 @@ jupyter notebook Triage_Automatico_Proyecto_IA.ipynb
 ```
 
 **El notebook incluye:**
+
 - ✅ Carga y exploración de datos
 - ✅ Limpieza y preprocesamiento
 - ✅ Entrenamiento de 5 modelos
@@ -289,6 +301,7 @@ Triage-Automatico---IA/
 ## 🛠️ Tech Stack
 
 ### Backend / Machine Learning
+
 ```
 Python 3.12              - Lenguaje principal
 Jupyter Notebook         - Análisis interactivo
@@ -304,6 +317,7 @@ Matplotlib              - Visualización de datos
 ```
 
 ### Frontend (UI Demostrativa)
+
 ```
 React 18.3.1            - Librería UI
 TypeScript              - Tipado estático
@@ -364,12 +378,14 @@ Recharts 2.15.2        - Gráficos interactivos
 ## 🎯 Uso Práctico
 
 ### Para Investigadores / Estudiantes de ML
+
 - 📚 Aprender sobre comparación de algoritmos
 - 🔬 Entender preprocesamiento de datos médicos
 - 📊 Analizar métricas de clasificación multiclase
 - 🧪 Practicar validación cruzada y tuning de hiperparámetros
 
 ### Para Profesionales de Salud (Educativo)
+
 - 🏥 Comprender principios de KTAS
 - 📖 Aprender sobre automatización de triaje
 - 💡 Ver aplicaciones de ML en salud
@@ -381,6 +397,7 @@ Recharts 2.15.2        - Gráficos interactivos
 ## 📚 Comandos Principales
 
 ### Análisis ML (Notebook)
+
 ```bash
 # Ejecutar todo el análisis
 jupyter notebook Triage_Automatico_Proyecto_IA.ipynb
@@ -390,6 +407,7 @@ jupyter nbconvert --to notebook --execute Triage_Automatico_Proyecto_IA.ipynb
 ```
 
 ### Frontend (Opcional)
+
 ```bash
 cd Frontend
 npm run dev        # Desarrollo con hot reload
@@ -403,7 +421,7 @@ npm run preview    # Previsualizar build
 
 **Proyecto colaborativo desarrollado por:**
 
-- **Ingeniero Alejandro Roa** (Líder del proyecto)
+- **Ingeniero Alejandro Roa**
 - **Alisson Navarro**
 - **Laura Holguín**
 
@@ -419,45 +437,9 @@ npm run preview    # Previsualizar build
 - 🏥 **KTAS:** Sistema Canadiense de Triage Monárquico (Canadian Triage Acuity Scale)
 - 🔬 **Librerías:** Scikit-Learn, XGBoost, Pandas, Jupyter
 
----
-
-## 🔐 Consideraciones de Seguridad
-
-⚠️ **Importante:** Este es un **proyecto académico de ML**. Para cualquier aplicación clínica real:
-
-- ✅ Debe ser validado por médicos especialistas
-- ✅ Cumplir normativas locales (HIPAA, GDPR, etc.)
-- ✅ Implementar auditoría de decisiones
-- ✅ Usar HTTPS en producción
-- ✅ Encriptar datos sensibles de pacientes
-- ✅ Obtener consentimiento informado
-
----
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el repositorio
-2. Crea una rama (`git checkout -b feature/MejorPropiedad`)
-3. Commit cambios (`git commit -m 'Add: descripción'`)
-4. Push a la rama (`git push origin feature/MejorPropiedad`)
-5. Abre un Pull Request
-
----
-
 ## 📄 Licencia
 
 Este proyecto está bajo la licencia MIT. Ver [`LICENSE`](LICENSE) para más detalles.
-
----
-
-## 💡 Agradecimientos
-
-- 🏥 Profesionales de salud por orientación clínica
-- 📊 Comunidad de Data Science por mejores prácticas
-- 🔬 Investigadores en ML para salud
-- 📚 Stack de open source: Scikit-Learn, Pandas, Jupyter
 
 ---
 
