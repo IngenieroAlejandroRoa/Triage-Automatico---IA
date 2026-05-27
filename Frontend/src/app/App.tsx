@@ -24,30 +24,34 @@ export default function App() {
     setIsAnalyzing(true);
     
     try {
+      const payload = {
+        group: typeED,
+        patients_per_hour: patientsPerHour,
+        age: data.age,
+        sex: data.sex,
+        mental: data.mental,
+        arrival: data.arrival,
+        injury: data.injury,
+        pain: data.pain,
+        nrs_pain: data.nrsPain,
+        temperature: data.bt,
+        heart_rate: data.hr,
+        systolic: data.sbp,
+        diastolic: data.dbp,
+        respiratory: data.rr,
+        saturation: data.spo2,
+        saturation_taken: data.saturationTaken,
+        symptoms_main: data.complaint.join(', ') || data.otherComplaint
+      };
+      
+      console.log('📤 DATOS ENVIADOS AL SERVIDOR:', payload);
+      
       const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          group: typeED,
-          patients_per_hour: patientsPerHour,
-          age: data.age,
-          sex: data.sex,
-          mental: data.mental,
-          arrival: data.arrival,
-          injury: data.injury,
-          pain: data.pain,
-          nrs_pain: data.nrsPain,
-          temperature: data.bt,
-          heart_rate: data.hr,
-          systolic: data.sbp,
-          diastolic: data.dbp,
-          respiratory: data.rr,
-          saturation: data.spo2,
-          saturation_taken: data.saturationTaken,
-          symptoms_main: data.complaint.join(', ') || data.otherComplaint
-        })
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -55,7 +59,10 @@ export default function App() {
       }
 
       const apiResult = await response.json();
+      console.log('📥 RESPUESTA DEL SERVIDOR:', apiResult);
+      
       if (apiResult.success) {
+        console.log('✅ Predicción exitosa:', apiResult);
         setResult({
           level: apiResult.ktas,
           confidence: apiResult.confidence,
@@ -63,7 +70,8 @@ export default function App() {
           probabilities: apiResult.probabilities
         });
       } else {
-        console.error('API Error:', apiResult.error);
+        console.error('❌ API Error:', apiResult.error);
+        alert('Error: ' + apiResult.error);
       }
     } catch (error) {
       console.error('Error connecting to API:', error);
