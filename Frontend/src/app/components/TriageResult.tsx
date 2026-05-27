@@ -15,9 +15,9 @@ const KTAS_DATA = {
     textColor: "text-red-500",
     lightBg: "bg-red-50",
     emoji: "😨",
-    title: "Resuscitation",
-    risk: "Immediate threat to life",
-    recommendation: "Immediate physician assessment required. Move to resuscitation room.",
+    title: "Reanimación",
+    risk: "Amenaza inmediata para la vida",
+    recommendation: "Evaluación inmediata del médico requerida. Traslade a la sala de reanimación.",
     time: "0 mins"
   },
   2: {
@@ -25,9 +25,9 @@ const KTAS_DATA = {
     textColor: "text-orange-600",
     lightBg: "bg-orange-50",
     emoji: "😟",
-    title: "Emergency",
-    risk: "Potential threat to life or limb",
-    recommendation: "Rapid medical intervention needed. Continuous monitoring.",
+    title: "Emergencia",
+    risk: "Amenaza potencial para la vida o extremidades",
+    recommendation: "Se requiere intervención médica rápida. Monitoreo continuo.",
     time: "< 15 mins"
   },
   3: {
@@ -35,9 +35,9 @@ const KTAS_DATA = {
     textColor: "text-yellow-600",
     lightBg: "bg-yellow-50",
     emoji: "😐",
-    title: "Urgency",
-    risk: "Significant distress, potential for deterioration",
-    recommendation: "Standard emergency assessment. Reassess regularly.",
+    title: "Urgencia",
+    risk: "Malestar significativo, potencial de deterioro",
+    recommendation: "Evaluación de emergencia estándar. Reevalúe regularmente.",
     time: "< 30 mins"
   },
   4: {
@@ -45,9 +45,9 @@ const KTAS_DATA = {
     textColor: "text-green-600",
     lightBg: "bg-green-50",
     emoji: "🙂",
-    title: "Less Urgency",
-    risk: "Mild to moderate distress",
-    recommendation: "Can wait safely. Proceed with standard diagnostic pathway.",
+    title: "Menos Urgencia",
+    risk: "Malestar leve a moderado",
+    recommendation: "Puede esperar de manera segura. Continúe con el protocolo diagnóstico estándar.",
     time: "< 60 mins"
   },
   5: {
@@ -55,9 +55,9 @@ const KTAS_DATA = {
     textColor: "text-blue-600",
     lightBg: "bg-blue-50",
     emoji: "😄",
-    title: "Non-Urgency",
-    risk: "Non-urgent, stable condition",
-    recommendation: "Suitable for fast-track or primary care clinic evaluation.",
+    title: "No Urgencia",
+    risk: "Condición no urgente, estable",
+    recommendation: "Adecuado para evaluación en clínica de acceso rápido o atención primaria.",
     time: "< 120 mins"
   }
 };
@@ -80,11 +80,11 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
         className="flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm font-medium mb-8"
       >
         <ArrowLeft size={16} />
-        New Assessment
+        Nueva Evaluación
       </button>
 
       <div className="text-center mb-10">
-        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Predicted KTAS Level</h2>
+        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Nivel KTAS Predicho</h2>
         
         <motion.div 
           initial={{ scale: 0 }}
@@ -112,7 +112,7 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
         >
           <div className="flex items-center gap-2 text-slate-400 mb-1">
             <ShieldAlert size={18} />
-            <h3 className="text-xs font-bold uppercase tracking-wider">Recommendation</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider">Recomendación</h3>
           </div>
           <p className="text-slate-700 font-medium text-sm leading-relaxed">{data.recommendation}</p>
         </motion.div>
@@ -125,11 +125,11 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
         >
           <div className="flex items-center gap-2 text-slate-400 mb-1">
             <Clock size={18} />
-            <h3 className="text-xs font-bold uppercase tracking-wider">Target Time</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider">Tiempo Objetivo</h3>
           </div>
           <div className="flex items-end gap-2">
             <span className={`text-2xl font-bold ${data.textColor}`}>{data.time}</span>
-            <span className="text-slate-500 font-medium text-sm pb-1">to physician</span>
+            <span className="text-slate-500 font-medium text-sm pb-1">para el médico</span>
           </div>
         </motion.div>
       </div>
@@ -141,7 +141,7 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
         className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-xs font-medium text-slate-400"
       >
         <HeartPulse size={14} className="text-blue-400" />
-        AI Confidence Score: 98.4%
+        Puntuación de Confianza IA: 98.4%
       </motion.div>
     </motion.div>
   );
