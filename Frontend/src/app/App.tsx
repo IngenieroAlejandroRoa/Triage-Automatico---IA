@@ -5,55 +5,76 @@ import { ECGLine } from "./components/ECGLine";
 import { ActivitySquare, Building2, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-// Mock inference logic
-function inferKTAS(data: TriageFormData): KtasLevel {
-  const { hr, spo2, sbp, rr, mental, nrsPain } = data;
-
-  // Level 1: Resuscitation (Life-threatening)
-  if (mental === "4" || spo2 < 85 || sbp < 80 || rr > 35) {
-    return 1;
-  }
-  
-  // Level 2: Emergency
-  if (mental === "3" || spo2 < 90 || sbp < 90 || hr > 130 || nrsPain >= 8) {
-    return 2;
-  }
-
-  // Level 3: Urgency
-  if (mental === "2" || spo2 < 94 || hr > 110 || rr > 24 || nrsPain >= 5) {
-    return 3;
-  }
-
-  // Level 4: Less Urgency
-  if (hr > 100 || nrsPain >= 3) {
-    return 4;
-  }
-
-  // Level 5: Non-Urgency
-  return 5;
+interface TriageResultData {
+  level: KtasLevel;
+  confidence: number;
+  description: string;
+  probabilities: Record<number, number>;
 }
 
 export default function App() {
-  const [resultLevel, setResultLevel] = useState<KtasLevel | null>(null);
+  const [result, setResult] = useState<TriageResultData | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showHospitalMenu, setShowHospitalMenu] = useState(false);
   const [hospital, setHospital] = useState("Hospital Central");
   const [patientsPerHour, setPatientsPerHour] = useState(15);
   const [typeED, setTypeED] = useState("1");
 
-  const handleRunTriage = (data: TriageFormData) => {
+  const handleRunTriage = async (data: TriageFormData) => {
     setIsAnalyzing(true);
     
-    // Simulate AI inference delay for realism
-    setTimeout(() => {
-      const level = inferKTAS(data);
-      setResultLevel(level);
+    try {
+      const response = await fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          group: typeED,
+          patients_per_hour: patientsPerHour,
+          age: data.age,
+          sex: data.sex,
+          mental: data.mental,
+          arrival: data.arrival,
+          injury: data.injury,
+          pain: data.pain,
+          nrs_pain: data.nrsPain,
+          temperature: data.bt,
+          heart_rate: data.hr,
+          systolic: data.sbp,
+          diastolic: data.dbp,
+          respiratory: data.rr,
+          saturation: data.spo2,
+          saturation_taken: data.saturationTaken,
+          symptoms_main: data.complaint.join(', ') || data.otherComplaint
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error en la predicción');
+      }
+
+      const apiResult = await response.json();
+      if (apiResult.success) {
+        setResult({
+          level: apiResult.ktas,
+          confidence: apiResult.confidence,
+          description: apiResult.description,
+          probabilities: apiResult.probabilities
+        });
+      } else {
+        console.error('API Error:', apiResult.error);
+      }
+    } catch (error) {
+      console.error('Error connecting to API:', error);
+      alert('Error al conectar con el servidor de predicción');
+    } finally {
       setIsAnalyzing(false);
-    }, 2000);
+    }
   };
 
   const resetTriage = () => {
-    setResultLevel(null);
+    setResult(null);
   };
 
   return (
@@ -158,7 +179,7 @@ export default function App() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-12 relative z-0 flex flex-col items-center justify-start">
         
         <AnimatePresence mode="wait">
-          {!resultLevel ? (
+          {!result ? (
             <motion.div 
               key="form"
               initial={{ opacity: 0, x: -20 }}
@@ -182,7 +203,7 @@ export default function App() {
               transition={{ duration: 0.3 }}
               className="w-full pt-10"
             >
-              <TriageResult level={resultLevel} onReset={resetTriage} />
+              <TriageResult data={result} onReset={resetTriage} />
             </motion.div>
           )}
         </AnimatePresence>

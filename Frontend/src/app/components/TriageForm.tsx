@@ -49,6 +49,7 @@ export type TriageFormData = {
   rr: number;
   bt: number;
   spo2: number;
+  saturationTaken: boolean;
   nrsPain: number;
   mental: string;
   arrival: string;
@@ -78,6 +79,7 @@ export function TriageForm({ onSubmit, isAnalyzing }: TriageFormProps) {
       rr: 16,
       bt: 36.5,
       spo2: 98,
+      saturationTaken: true,
       nrsPain: 3,
       mental: "1",
       arrival: "1",
@@ -129,7 +131,7 @@ export function TriageForm({ onSubmit, isAnalyzing }: TriageFormProps) {
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400 rounded-t-3xl" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 relative z-10">
         
-        {/* Información Básica */}
+        {/* 1. Edad */}
         <div className="col-span-1">
           <label className={labelClasses}>Edad</label>
           <div className="relative">
@@ -138,6 +140,7 @@ export function TriageForm({ onSubmit, isAnalyzing }: TriageFormProps) {
           </div>
         </div>
 
+        {/* 2. Sexo */}
         <div className="col-span-1">
           <label className={labelClasses}>Sexo</label>
           <div className="relative">
@@ -149,87 +152,8 @@ export function TriageForm({ onSubmit, isAnalyzing }: TriageFormProps) {
           </div>
         </div>
 
+        {/* 3. Estado Mental */}
         <div className="col-span-1">
-          <label className={labelClasses}>Lesión</label>
-          <div className="relative">
-            <div className={iconWrapper}><AlertCircle size={18} /></div>
-            <select {...register("injury")} className={`${inputClasses} appearance-none`}>
-              <option value="1">No</option>
-              <option value="2">Sí</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>Dolor</label>
-          <div className="relative">
-            <div className={iconWrapper}><AlertCircle size={18} /></div>
-            <select {...register("pain")} className={`${inputClasses} appearance-none`}>
-              <option value="0">No</option>
-              <option value="1">Sí</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Signos Vitales */}
-        <div className="col-span-1">
-          <label className={labelClasses}>Frecuencia Cardíaca (lpm)</label>
-          <div className="relative">
-            <div className={iconWrapper}><HeartPulse size={18} /></div>
-            <input type="number" {...register("hr")} className={inputClasses} placeholder="60-100" />
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>Presión Sistólica (mmHg)</label>
-          <div className="relative">
-            <div className={iconWrapper}><Activity size={18} /></div>
-            <input type="number" {...register("sbp")} className={inputClasses} placeholder="120" />
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>Presión Diastólica (mmHg)</label>
-          <div className="relative">
-            <div className={iconWrapper}><Activity size={18} opacity={0.6}/></div>
-            <input type="number" {...register("dbp")} className={inputClasses} placeholder="80" />
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>Frec. Respiratoria (bpm)</label>
-          <div className="relative">
-            <div className={iconWrapper}><Wind size={18} /></div>
-            <input type="number" {...register("rr")} className={inputClasses} placeholder="12-20" />
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>Temperatura Corporal (°C)</label>
-          <div className="relative">
-            <div className={iconWrapper}><Thermometer size={18} /></div>
-            <input type="number" step="0.1" {...register("bt")} className={inputClasses} placeholder="36.5" />
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>SpO2 (%)</label>
-          <div className="relative">
-            <div className={iconWrapper}><Droplets size={18} /></div>
-            <input type="number" {...register("spo2")} className={inputClasses} placeholder="95-100" />
-          </div>
-        </div>
-
-        <div className="col-span-1">
-          <label className={labelClasses}>Escala NRS Dolor (0-10)</label>
-          <div className="relative">
-            <div className={iconWrapper}><AlertCircle size={18} /></div>
-            <input type="number" min="0" max="10" {...register("nrsPain")} className={inputClasses} placeholder="0 = Sin dolor" />
-          </div>
-        </div>
-
-        {/* Evaluación Clínica */}
-        <div className="col-span-1 md:col-span-2 lg:col-span-1">
           <label className={labelClasses}>Estado Mental</label>
           <div className="relative">
             <div className={iconWrapper}><Brain size={18} /></div>
@@ -242,7 +166,8 @@ export function TriageForm({ onSubmit, isAnalyzing }: TriageFormProps) {
           </div>
         </div>
 
-        <div className="col-span-1 md:col-span-2 lg:col-span-1">
+        {/* 4. Modo de Llegada */}
+        <div className="col-span-1">
           <label className={labelClasses}>Modo de Llegada</label>
           <div className="relative">
             <div className={iconWrapper}><Ambulance size={18} /></div>
@@ -253,6 +178,105 @@ export function TriageForm({ onSubmit, isAnalyzing }: TriageFormProps) {
               <option value="4">Ambulancia privada</option>
               <option value="5">Otros</option>
             </select>
+          </div>
+        </div>
+
+        {/* 5. Lesión */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Lesión</label>
+          <div className="relative">
+            <div className={iconWrapper}><AlertCircle size={18} /></div>
+            <select {...register("injury")} className={`${inputClasses} appearance-none`}>
+              <option value="1">No</option>
+              <option value="2">Sí</option>
+            </select>
+          </div>
+        </div>
+
+        {/* 6. Dolor */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Dolor</label>
+          <div className="relative">
+            <div className={iconWrapper}><AlertCircle size={18} /></div>
+            <select {...register("pain")} className={`${inputClasses} appearance-none`}>
+              <option value="0">No</option>
+              <option value="1">Sí</option>
+            </select>
+          </div>
+        </div>
+
+        {/* 7. Escala de Dolor */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Escala NRS Dolor (0-10)</label>
+          <div className="relative">
+            <div className={iconWrapper}><AlertCircle size={18} /></div>
+            <input type="number" min="0" max="10" {...register("nrsPain")} className={inputClasses} placeholder="0 = Sin dolor" />
+          </div>
+        </div>
+
+        {/* 8. Temperatura */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Temperatura Corporal (°C)</label>
+          <div className="relative">
+            <div className={iconWrapper}><Thermometer size={18} /></div>
+            <input type="number" step="0.1" {...register("bt")} className={inputClasses} placeholder="36.5" />
+          </div>
+        </div>
+
+        {/* 9. Frecuencia Cardíaca */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Frecuencia Cardíaca (lpm)</label>
+          <div className="relative">
+            <div className={iconWrapper}><HeartPulse size={18} /></div>
+            <input type="number" {...register("hr")} className={inputClasses} placeholder="60-100" />
+          </div>
+        </div>
+
+        {/* 10. Presión Sistólica */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Presión Sistólica (mmHg)</label>
+          <div className="relative">
+            <div className={iconWrapper}><Activity size={18} /></div>
+            <input type="number" {...register("sbp")} className={inputClasses} placeholder="120" />
+          </div>
+        </div>
+
+        {/* 11. Presión Diastólica */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Presión Diastólica (mmHg)</label>
+          <div className="relative">
+            <div className={iconWrapper}><Activity size={18} opacity={0.6}/></div>
+            <input type="number" {...register("dbp")} className={inputClasses} placeholder="80" />
+          </div>
+        </div>
+
+        {/* 12. Frecuencia Respiratoria */}
+        <div className="col-span-1">
+          <label className={labelClasses}>Frec. Respiratoria (bpm)</label>
+          <div className="relative">
+            <div className={iconWrapper}><Wind size={18} /></div>
+            <input type="number" {...register("rr")} className={inputClasses} placeholder="12-20" />
+          </div>
+        </div>
+
+        {/* 13. Saturación Tomada */}
+        <div className="col-span-1 flex items-end pb-1">
+          <label className="flex items-center gap-3 cursor-pointer bg-gradient-to-br from-blue-50 to-slate-50 border border-blue-200/50 rounded-xl px-4 py-3 hover:bg-white hover:border-blue-300/70 hover:shadow-md transition-all w-full">
+            <input
+              type="checkbox"
+              {...register("saturationTaken")}
+              className="w-5 h-5 accent-blue-600 cursor-pointer"
+            />
+            <span className="text-sm font-medium text-slate-700">Saturación tomada</span>
+          </label>
+        </div>
+
+        {/* 14. SpO2 */}
+        <div className="col-span-1">
+          <label className={labelClasses}>SpO2 (%)</label>
+          <div className="relative">
+            <div className={iconWrapper}><Droplets size={18} /></div>
+            <input type="number" {...register("spo2")} className={inputClasses} placeholder="95-100" />
           </div>
         </div>
 

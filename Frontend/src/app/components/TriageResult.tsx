@@ -1,11 +1,18 @@
 import React from "react";
 import { motion } from "motion/react";
-import { ArrowLeft, ShieldAlert, HeartPulse, Clock } from "lucide-react";
+import { ArrowLeft, ShieldAlert, HeartPulse, Clock, TrendingUp } from "lucide-react";
 
 export type KtasLevel = 1 | 2 | 3 | 4 | 5;
 
-interface TriageResultProps {
+interface TriageResultData {
   level: KtasLevel;
+  confidence: number;
+  description: string;
+  probabilities: Record<number, number>;
+}
+
+interface TriageResultProps {
+  data: TriageResultData;
   onReset: () => void;
 }
 
@@ -62,8 +69,8 @@ const KTAS_DATA = {
   }
 };
 
-export function TriageResult({ level, onReset }: TriageResultProps) {
-  const data = KTAS_DATA[level];
+export function TriageResult({ data, onReset }: TriageResultProps) {
+  const ktasData = KTAS_DATA[data.level];
 
   return (
     <motion.div 
@@ -73,11 +80,11 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
       className="bg-white rounded-3xl shadow-[0_8px_40px_rgb(0,0,0,0.08)] border border-slate-100 p-10 w-full max-w-2xl mx-auto overflow-hidden relative"
     >
       {/* Decorative top bar */}
-      <div className={`absolute top-0 left-0 right-0 h-3 ${data.color}`} />
+      <div className={`absolute top-0 left-0 right-0 h-3 ${ktasData.color}`} />
 
       <button 
         onClick={onReset}
-        className="flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm font-medium mb-8"
+        className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white rounded-full px-4 py-2 transition-colors text-sm font-medium mb-8"
       >
         <ArrowLeft size={16} />
         Nueva Evaluación
@@ -90,17 +97,17 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className={`mx-auto w-40 h-40 ${data.lightBg} rounded-full flex items-center justify-center mb-6 shadow-inner relative`}
+          className={`mx-auto w-40 h-40 ${ktasData.lightBg} rounded-full flex items-center justify-center mb-6 shadow-inner relative`}
         >
           <div className="absolute inset-0 rounded-full border-4 border-white/50" />
           <div className="flex flex-col items-center">
-            <span className={`text-6xl font-black ${data.textColor} leading-none mb-1`}>{level}</span>
-            <span className="text-4xl">{data.emoji}</span>
+            <span className={`text-6xl font-black ${ktasData.textColor} leading-none mb-1`}>{data.level}</span>
+            <span className="text-4xl">{ktasData.emoji}</span>
           </div>
         </motion.div>
 
-        <h1 className={`text-3xl font-black ${data.textColor} mb-2 tracking-tight`}>{data.title}</h1>
-        <p className="text-slate-500 font-medium text-lg max-w-sm mx-auto">{data.risk}</p>
+        <h1 className={`text-3xl font-black ${ktasData.textColor} mb-2 tracking-tight`}>{ktasData.title}</h1>
+        <p className="text-slate-500 font-medium text-lg max-w-sm mx-auto">{ktasData.risk}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -114,7 +121,7 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
             <ShieldAlert size={18} />
             <h3 className="text-xs font-bold uppercase tracking-wider">Recomendación</h3>
           </div>
-          <p className="text-slate-700 font-medium text-sm leading-relaxed">{data.recommendation}</p>
+          <p className="text-slate-700 font-medium text-sm leading-relaxed">{ktasData.recommendation}</p>
         </motion.div>
 
         <motion.div 
@@ -128,20 +135,39 @@ export function TriageResult({ level, onReset }: TriageResultProps) {
             <h3 className="text-xs font-bold uppercase tracking-wider">Tiempo Objetivo</h3>
           </div>
           <div className="flex items-end gap-2">
-            <span className={`text-2xl font-bold ${data.textColor}`}>{data.time}</span>
+            <span className={`text-2xl font-bold ${ktasData.textColor}`}>{ktasData.time}</span>
             <span className="text-slate-500 font-medium text-sm pb-1">para el médico</span>
           </div>
         </motion.div>
       </div>
 
+      {/* Confidence Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="mt-8 bg-gradient-to-r from-blue-50 to-slate-50 rounded-2xl p-6 border border-blue-100"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-100 rounded-full p-3">
+              <TrendingUp size={20} className="text-blue-600" />
+            </div>
+            <span className="text-sm font-semibold text-slate-700 uppercase tracking-widest">Confianza</span>
+          </div>
+          <span className={`text-3xl font-bold ${ktasData.textColor}`}>{data.confidence.toFixed(1)}%</span>
+        </div>
+      </motion.div>
+
+      {/* Bottom note */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-xs font-medium text-slate-400"
+        className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-xs font-medium text-slate-400"
       >
         <HeartPulse size={14} className="text-blue-400" />
-        Puntuación de Confianza IA: 98.4%
+        Predicción basada en Random Forest
       </motion.div>
     </motion.div>
   );
